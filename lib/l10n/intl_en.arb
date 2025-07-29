@@ -23,5 +23,9 @@
   "syntax_error_state": "State error: {message}",
   "syntax_error_unsupported": "Unsupported feature: {message}",
   "syntax_error_unimplemented": "Feature not implemented",
-  "syntax_error_assertion": "Logic error: {message}"
+  "syntax_error_assertion": "Logic error: {message}",
+
+  "movie": "Movies",
+  "loading_movies": "Loading movies...",
+  "count_minutes": "{count} minutes"
 }

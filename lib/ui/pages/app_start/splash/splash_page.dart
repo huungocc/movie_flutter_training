@@ -26,8 +26,10 @@ class _SplashPageState extends State<SplashPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Stack(
+        alignment: Alignment.center,
         children: [
-          Positioned.fill(child: Container(color: AppColors.primary)),
+          Positioned.fill(child: Container(color: AppColors.background)),
+
         ],
       ),
     );

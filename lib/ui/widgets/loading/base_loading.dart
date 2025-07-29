@@ -8,7 +8,7 @@ class BaseLoading extends StatelessWidget {
 
   const BaseLoading({
     super.key,
-    this.valueColor = const Color(0xFFC90003),
+    this.valueColor = AppColors.textBlack,
     this.backgroundColor = AppColors.textWhite,
     this.size = 24,
   });

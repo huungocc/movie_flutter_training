@@ -40,6 +40,7 @@ class _MyAppState extends State<MyApp> {
 
   Widget _buildMaterialApp({required Locale locale}) {
     return MaterialApp.router(
+      debugShowCheckedModeBanner: false,
       title: AppConfigs.appName,
       themeMode: ThemeMode.dark,
       routerConfig: AppRouter.router,
