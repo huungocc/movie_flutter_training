@@ -56,6 +56,7 @@ class AppColors {
   static const Color boxShadowColor = Color(0x3D40BFFF);
 
   ///Movie
+  static const Color splashBackground = Color(0xff1a222b);
   static const Color movieBackground = Color(0xff242a32);
   static const Color movieYellowStar = Color(0xfff98703);
 }

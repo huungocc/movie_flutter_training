@@ -25,5 +25,8 @@
   "syntax_error_unimplemented": "Chức năng chưa được triển khai",
   "syntax_error_assertion": "Lỗi logic: {message}",
 
-  "loading_movies": "Đang tải phim..."
+  "movie": "Danh sách phim",
+  "details": "Chi tiết phim",
+  "loading_movies": "Đang tải phim...",
+  "count_minutes": "{count} phút"
 }
