@@ -1,0 +1,29 @@
+{
+  "error_connection_timeout": "Kết nối quá thời gian, vui lòng thử lại",
+  "error_receive_timeout": "Nhận dữ liệu quá lâu, vui lòng thử lại",
+  "error_400": "Yêu cầu không hợp lệ",
+  "error_401": "Không có quyền truy cập",
+  "error_403": "Bị từ chối truy cập",
+  "error_404": "Không tìm thấy dữ liệu",
+  "error_500": "Lỗi máy chủ nội bộ",
+  "error_502": "Lỗi gateway",
+  "error_503": "Dịch vụ không khả dụng",
+  "error_unknown_server": "Lỗi máy chủ: {statusCode}",
+  "error_no_connection": "Không có kết nối mạng, vui lòng kiểm tra lại",
+  "error_canceled": "Yêu cầu đã bị hủy",
+  "error_send_timeout": "Gửi dữ liệu quá thời gian",
+  "error_bad_certificate": "Chứng chỉ SSL không hợp lệ",
+  "error_unknown": "Lỗi không xác định: {message}",
+
+  "syntax_error_format": "Dữ liệu không hợp lệ: {message}",
+  "syntax_error_type": "Lỗi xử lý dữ liệu: Kiểu dữ liệu không đúng",
+  "syntax_error_no_method": "Lỗi xử lý: Phương thức không tồn tại",
+  "syntax_error_range": "Lỗi truy cập dữ liệu: {message}",
+  "syntax_error_argument": "Tham số không hợp lệ: {message}",
+  "syntax_error_state": "Lỗi trạng thái: {message}",
+  "syntax_error_unsupported": "Chức năng không được hỗ trợ: {message}",
+  "syntax_error_unimplemented": "Chức năng chưa được triển khai",
+  "syntax_error_assertion": "Lỗi logic: {message}",
+
+  "loading_movies": "Đang tải phim..."
+}
