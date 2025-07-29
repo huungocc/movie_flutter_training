@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:movie_flutter_training/configs/app_configs.dart';
 import 'package:movie_flutter_training/ui/pages/app_start/splash/splash_page.dart';
+import 'package:movie_flutter_training/ui/pages/movie/detail/detail_movie_page.dart';
 import 'package:movie_flutter_training/ui/pages/movie/list/list_movie_page.dart';
 
 class AppRouter {
@@ -28,13 +29,13 @@ class AppRouter {
       path: listMovie,
       builder: (context, state) => const ListMoviePage(),
     ),
-    // GoRoute(
-    //   name: detailMovie,
-    //   path: detailMovie,
-    //   builder: (context, state) => DetailMoviePage(
-    //     arguments: DetailMovieArguments(id: state.extra as int),
-    //   ),
-    // ),
+    GoRoute(
+      name: detailMovie,
+      path: detailMovie,
+      builder: (context, state) => DetailMoviePage(
+        arguments: DetailMovieArguments(id: state.extra as int),
+      ),
+    ),
   ];
 }
 

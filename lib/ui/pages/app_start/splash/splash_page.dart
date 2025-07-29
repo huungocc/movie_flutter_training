@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:movie_flutter_training/common/app_colors.dart';
+import 'package:movie_flutter_training/gen/assets.gen.dart';
 import 'package:movie_flutter_training/ui/pages/app_start/splash/splash_navigator.dart';
+import 'package:movie_flutter_training/ui/widgets/base_screen.dart';
 
 class SplashPage extends StatefulWidget {
   const SplashPage({super.key});
@@ -24,13 +26,12 @@ class _SplashPageState extends State<SplashPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Stack(
-        alignment: Alignment.center,
-        children: [
-          Positioned.fill(child: Container(color: AppColors.background)),
-
-        ],
+    return BaseScreen(
+      colorBackground: AppColors.splashBackground,
+      isLightStatusBar: true,
+      hideAppBar: true,
+      body: Center(
+          child: Assets.images.appIcon.image(scale: 5)
       ),
     );
   }

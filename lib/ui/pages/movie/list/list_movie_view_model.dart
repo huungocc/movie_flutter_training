@@ -1,4 +1,3 @@
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:movie_flutter_training/models/entities/movie/movie_entity.dart';
 import 'package:movie_flutter_training/repository/movie_repository.dart';
@@ -17,8 +16,6 @@ class ListMovieProvider extends ChangeNotifier {
 
   final List<MovieEntity> _movies = [];
   List<MovieEntity> get movies => _movies;
-
-  MovieEntity? singleMovie;
 
   ListMovieProvider(this.movieRepository);
 
@@ -44,7 +41,7 @@ class ListMovieProvider extends ChangeNotifier {
 
       isComplete = _currentPage >= _totalPages;
     } catch (e) {
-      _handleError(e);
+      ExceptionHandler.handleError(e);
     } finally {
       if (refresh) {
         isRefreshing = false;
@@ -70,20 +67,10 @@ class ListMovieProvider extends ChangeNotifier {
 
       isComplete = _currentPage >= _totalPages;
     } catch (e) {
-      _handleError(e);
+      ExceptionHandler.handleError(e);
     } finally {
       isLoadingMore = false;
       notifyListeners();
-    }
-  }
-
-  String? _handleError(Object e) {
-    if (e is DioException) {
-      return e.toString();
-    } else {
-      final message = ExceptionHandler.handleSyntaxError(e);
-      ExceptionHandler.showErrorSnackBar(message);
-      return message;
     }
   }
 }
