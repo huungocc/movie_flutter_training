@@ -1,0 +1,27 @@
+{
+  "error_connection_timeout": "Connection timed out, please try again",
+  "error_receive_timeout": "Receiving data timed out, please try again",
+  "error_400": "Bad request",
+  "error_401": "Unauthorized access",
+  "error_403": "Access forbidden",
+  "error_404": "Data not found",
+  "error_500": "Internal server error",
+  "error_502": "Gateway error",
+  "error_503": "Service unavailable",
+  "error_unknown_server": "Server error: {statusCode}",
+  "error_no_connection": "No network connection, please check again",
+  "error_canceled": "Request canceled",
+  "error_send_timeout": "Sending data timed out",
+  "error_bad_certificate": "Invalid SSL certificate",
+  "error_unknown": "Unknown error: {message}",
+
+  "syntax_error_format": "Invalid data: {message}",
+  "syntax_error_type": "Data processing error: Invalid data type",
+  "syntax_error_no_method": "Processing error: Method does not exist",
+  "syntax_error_range": "Data access error: {message}",
+  "syntax_error_argument": "Invalid argument: {message}",
+  "syntax_error_state": "State error: {message}",
+  "syntax_error_unsupported": "Unsupported feature: {message}",
+  "syntax_error_unimplemented": "Feature not implemented",
+  "syntax_error_assertion": "Logic error: {message}"
+}
