@@ -3,6 +3,7 @@ import 'package:movie_flutter_training/common/app_colors.dart';
 import 'package:movie_flutter_training/generated/l10n.dart';
 import 'package:movie_flutter_training/network/api_util.dart';
 import 'package:movie_flutter_training/repository/movie_repository.dart';
+import 'package:movie_flutter_training/ui/pages/movie/list/list_movie_navigator.dart';
 import 'package:movie_flutter_training/ui/pages/movie/list/list_movie_view_model.dart';
 import 'package:movie_flutter_training/ui/widgets/base_screen.dart';
 import 'package:movie_flutter_training/ui/widgets/base_text_label.dart';
@@ -17,8 +18,7 @@ class ListMoviePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
       create: (_) =>
-          ListMovieProvider(MovieRepositoryImpl(apiClient: ApiUtil.apiClient))
-            ..fetchPopularMovies(),
+          ListMovieProvider(MovieRepositoryImpl(apiClient: ApiUtil.apiClient)),
       child: _ListMovieBody(),
     );
   }
@@ -38,6 +38,10 @@ class _ListMovieBodyState extends State<_ListMovieBody> {
   void initState() {
     super.initState();
     _scrollController.addListener(_onScroll);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final provider = context.read<ListMovieProvider>();
+      provider.fetchPopularMovies();
+    });
   }
 
   void _onScroll() {
@@ -54,7 +58,6 @@ class _ListMovieBodyState extends State<_ListMovieBody> {
   Widget build(BuildContext context) {
     final provider = context.watch<ListMovieProvider>();
     final movies = provider.movies;
-
     return BaseScreen(
       colorAppBar: Colors.transparent,
       hiddenIconBack: true,
@@ -102,7 +105,14 @@ class _ListMovieBodyState extends State<_ListMovieBody> {
                   }
 
                   final movie = movies[index];
-                  return MovieInfoCard(movie: movie, onTap: () {});
+                  return MovieInfoCard(
+                    movie: movie,
+                    onTap: () {
+                      ListMovieNavigator(
+                        context: context,
+                      ).navigateToDetail(movie.id!);
+                    },
+                  );
                 },
               ),
       ),

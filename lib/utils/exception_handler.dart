@@ -117,4 +117,14 @@ class ExceptionHandler {
       });
     }
   }
+
+  static String? handleError(Object e) {
+    if (e is DioException) {
+      return e.toString();
+    } else {
+      final message = ExceptionHandler.handleSyntaxError(e);
+      ExceptionHandler.showErrorSnackBar(message);
+      return message;
+    }
+  }
 }

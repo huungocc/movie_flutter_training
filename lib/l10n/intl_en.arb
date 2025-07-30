@@ -26,6 +26,7 @@
   "syntax_error_assertion": "Logic error: {message}",
 
   "movie": "Movies",
+  "details": "Details",
   "loading_movies": "Loading movies...",
   "count_minutes": "{count} minutes"
 }
