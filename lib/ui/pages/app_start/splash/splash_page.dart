@@ -1,0 +1,38 @@
+import 'package:flutter/material.dart';
+import 'package:movie_flutter_training/common/app_colors.dart';
+import 'package:movie_flutter_training/gen/assets.gen.dart';
+import 'package:movie_flutter_training/ui/pages/app_start/splash/splash_navigator.dart';
+import 'package:movie_flutter_training/ui/widgets/base_screen.dart';
+
+class SplashPage extends StatefulWidget {
+  const SplashPage({super.key});
+
+  @override
+  State<SplashPage> createState() => _SplashPageState();
+}
+
+class _SplashPageState extends State<SplashPage> {
+  @override
+  void initState() {
+    super.initState();
+    _navigateToListMovie(context);
+  }
+
+  void _navigateToListMovie(context) {
+    Future.delayed(const Duration(seconds: 2), () {
+      SplashNavigator(context: context).openListMovie();
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return BaseScreen(
+      colorBackground: AppColors.splashBackground,
+      isLightStatusBar: true,
+      hideAppBar: true,
+      body: Center(
+          child: Assets.images.appIcon.image(scale: 5)
+      ),
+    );
+  }
+}
