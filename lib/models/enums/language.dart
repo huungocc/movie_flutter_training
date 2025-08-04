@@ -33,4 +33,17 @@ extension LanguageExt on Language {
       return null;
     }
   }
+
+  Language get toggle {
+    return this == Language.vietnamese ? Language.english : Language.vietnamese;
+  }
+
+  String get flag {
+    switch (this) {
+      case Language.vietnamese:
+        return '🇻🇳';
+      case Language.english:
+        return '🇺🇸';
+    }
+  }
 }

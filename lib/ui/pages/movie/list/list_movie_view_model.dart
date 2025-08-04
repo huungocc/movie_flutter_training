@@ -3,13 +3,23 @@ import 'package:movie_flutter_training/models/entities/movie/movie_entity.dart';
 import 'package:movie_flutter_training/repository/movie_repository.dart';
 import 'package:movie_flutter_training/utils/exception_handler.dart';
 
+enum MovieLoadingState {
+  initial,
+  loading,
+  loaded,
+  error,
+  refreshing,
+  loadingMore,
+}
+
 class ListMovieProvider extends ChangeNotifier {
   final MovieRepositoryImpl movieRepository;
 
-  bool isLoading = false;
-  bool isLoadingMore = false;
-  bool isComplete = false;
-  bool isRefreshing = false;
+  MovieLoadingState _state = MovieLoadingState.initial;
+  MovieLoadingState get state => _state;
+
+  String? _errorMessage;
+  String? get errorMessage => _errorMessage;
 
   int _currentPage = 1;
   int _totalPages = 1;
@@ -19,17 +29,31 @@ class ListMovieProvider extends ChangeNotifier {
 
   ListMovieProvider(this.movieRepository);
 
+  //Getter state
+  bool get isInitial => _state == MovieLoadingState.initial;
+  bool get isLoading => _state == MovieLoadingState.loading;
+  bool get isLoaded => _state == MovieLoadingState.loaded;
+  bool get isError => _state == MovieLoadingState.error;
+  bool get isRefreshing => _state == MovieLoadingState.refreshing;
+  bool get isLoadingMore => _state == MovieLoadingState.loadingMore;
+  bool get isComplete => _currentPage >= _totalPages;
+  bool get hasData => _movies.isNotEmpty;
+  bool get canLoadMore => !isLoadingMore && !isComplete && !isRefreshing;
+
+  void _setNewState(MovieLoadingState newState, {String? error}) {
+    _state = newState;
+    _errorMessage = error;
+    notifyListeners();
+  }
+
   Future<void> fetchPopularMovies({bool refresh = false}) async {
     if (refresh) {
       _movies.clear();
       _currentPage = 1;
-      isComplete = false;
-      isRefreshing = true;
+      _setNewState(MovieLoadingState.refreshing);
     } else {
-      isLoading = true;
+      _setNewState(MovieLoadingState.loading);
     }
-
-    notifyListeners();
 
     try {
       final response = await movieRepository.getPopularMovies(page: 1);
@@ -39,24 +63,18 @@ class ListMovieProvider extends ChangeNotifier {
       _currentPage = response.page;
       _totalPages = response.totalPages;
 
-      isComplete = _currentPage >= _totalPages;
+      _setNewState(MovieLoadingState.loaded);
     } catch (e) {
+      final errorMsg = e.toString();
       ExceptionHandler.handleError(e);
-    } finally {
-      if (refresh) {
-        isRefreshing = false;
-      } else {
-        isLoading = false;
-      }
-      notifyListeners();
+      _setNewState(MovieLoadingState.error, error: errorMsg);
     }
   }
 
   Future<void> loadMoreMovies() async {
-    if (isLoadingMore || isComplete) return;
+    if (!canLoadMore) return;
 
-    isLoadingMore = true;
-    notifyListeners();
+    _setNewState(MovieLoadingState.loadingMore);
 
     try {
       final nextPage = _currentPage + 1;
@@ -65,13 +83,11 @@ class ListMovieProvider extends ChangeNotifier {
       _currentPage = response.page;
       _totalPages = response.totalPages;
 
-      isComplete = _currentPage >= _totalPages;
+      _setNewState(MovieLoadingState.loaded);
     } catch (e) {
+      final errorMsg = e.toString();
       ExceptionHandler.handleError(e);
-    } finally {
-      isLoadingMore = false;
-      notifyListeners();
+      _setNewState(MovieLoadingState.error, error: errorMsg);
     }
   }
 }
-
