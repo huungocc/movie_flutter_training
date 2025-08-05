@@ -1,16 +1,5 @@
-# movie_flutter_training
-
-A new Flutter project.
-
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+### 🎞️ Movie
+- `Danh sách phim`: Hiển thị danh sách phim từ API + Refresh + Load more.
+- `Chi tiết phim`: Hiển thị nội dung chi tiết của phim khi chọn.
+- `Đa ngôn ngữ`: Hiển thị ngôn ngữ tương ứng.
+<img src="assets/gifs/movie.gif" width="300">

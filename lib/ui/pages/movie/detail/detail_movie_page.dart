@@ -60,7 +60,6 @@ class _DetailMovieBodyState extends State<_DetailMovieBody> {
   @override
   Widget build(BuildContext context) {
     final provider = context.watch<DetailMovieProvider>();
-    final movie = provider.movieEntity;
 
     return BaseScreen(
       colorAppBar: Colors.transparent,
@@ -82,9 +81,18 @@ class _DetailMovieBodyState extends State<_DetailMovieBody> {
           ),
         ),
       ],
-      body: provider.isLoading && movie == null
-          ? BaseLoading(size: 50)
-          : SingleChildScrollView(
+      body: _buildContent(context, provider),
+    );
+  }
+
+  Widget _buildContent(BuildContext context, DetailMovieProvider provider) {
+    if (provider.isLoading) {
+      return BaseLoading(size: 50);
+    }
+
+    if (provider.isLoaded && provider.hasData) {
+      final movie = provider.movieEntity;
+      return SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -98,7 +106,7 @@ class _DetailMovieBodyState extends State<_DetailMovieBody> {
                   ),
                   child: BaseCachedImage(
                     imageUrl:
-                        movie!.backdropPathUrl,
+                    movie!.backdropPathUrl,
                     height: 250,
                     width: double.infinity,
                     fit: BoxFit.cover,
@@ -115,7 +123,7 @@ class _DetailMovieBodyState extends State<_DetailMovieBody> {
                       height: 150,
                       width: 120,
                       imageUrl:
-                          movie.posterPathUrl,
+                      movie.posterPathUrl,
                       placeholder: BaseLoading(size: 30),
                       errorWidget: Icon(Icons.error),
                       fit: BoxFit.cover,
@@ -196,7 +204,8 @@ class _DetailMovieBodyState extends State<_DetailMovieBody> {
             ),
           ],
         ),
-      ),
-    );
+      );
+    }
+    return SizedBox.shrink();
   }
 }
