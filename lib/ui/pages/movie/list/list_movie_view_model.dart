@@ -24,7 +24,7 @@ class ListMovieProvider extends ChangeNotifier {
   int _currentPage = 1;
   int _totalPages = 1;
 
-  final List<MovieEntity> _movies = [];
+  List<MovieEntity> _movies = [];
   List<MovieEntity> get movies => _movies;
 
   ListMovieProvider(this.movieRepository);
@@ -48,7 +48,6 @@ class ListMovieProvider extends ChangeNotifier {
 
   Future<void> fetchPopularMovies({bool refresh = false}) async {
     if (refresh) {
-      _movies.clear();
       _currentPage = 1;
       _setNewState(MovieLoadingState.refreshing);
     } else {
@@ -57,9 +56,7 @@ class ListMovieProvider extends ChangeNotifier {
 
     try {
       final response = await movieRepository.getPopularMovies(page: 1);
-      _movies
-        ..clear()
-        ..addAll(response.results);
+      _movies = response.results;
       _currentPage = response.page;
       _totalPages = response.totalPages;
 
