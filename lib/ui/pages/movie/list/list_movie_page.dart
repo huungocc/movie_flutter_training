@@ -10,6 +10,7 @@ import 'package:movie_flutter_training/ui/pages/movie/list/list_movie_navigator.
 import 'package:movie_flutter_training/ui/pages/movie/list/list_movie_view_model.dart';
 import 'package:movie_flutter_training/ui/widgets/base_screen.dart';
 import 'package:movie_flutter_training/ui/widgets/base_text_label.dart';
+import 'package:movie_flutter_training/ui/widgets/list/list_empty_widget.dart';
 import 'package:movie_flutter_training/ui/widgets/loading/base_loading.dart';
 import 'package:movie_flutter_training/ui/widgets/movie/movie_Info_card.dart';
 import 'package:provider/provider.dart';
@@ -22,7 +23,7 @@ class ListMoviePage extends StatelessWidget {
     return ChangeNotifierProvider(
       create: (_) =>
           ListMovieProvider(MovieRepositoryImpl(apiClient: ApiUtil.apiClient)),
-      child: _ListMovieBody(),
+      child: const _ListMovieBody(),
     );
   }
 }
@@ -42,28 +43,23 @@ class _ListMovieBodyState extends State<_ListMovieBody> {
     super.initState();
     _scrollController.addListener(_onScroll);
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      final provider = context.read<ListMovieProvider>();
-      provider.fetchPopularMovies();
+      _getData();
     });
   }
 
+  void _getData({bool isRefresh = false}) {
+    context.read<ListMovieProvider>().fetchPopularMovies(refresh: isRefresh);
+  }
+
   void _onScroll() {
-    final provider = context.read<ListMovieProvider>();
     if (_scrollController.position.pixels >=
-        _scrollController.position.maxScrollExtent - 100 &&
-        provider.canLoadMore) {
-      provider.loadMoreMovies();
+        _scrollController.position.maxScrollExtent - 100) {
+      context.read<ListMovieProvider>().loadMoreMovies();
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final provider = context.watch<ListMovieProvider>();
-    final movies = provider.movies;
-
-    final setting = context.watch<AppSettingProvider>();
-    final currentLang = setting.language;
-
     return BaseScreen(
       colorAppBar: Colors.transparent,
       hiddenIconBack: true,
@@ -72,86 +68,110 @@ class _ListMovieBodyState extends State<_ListMovieBody> {
       title: S.of(context).movie,
       colorTitle: AppColors.textWhite,
       rightWidgets: [
-        IconButton(
-          icon: BaseTextLabel(currentLang.flag, fontSize: 24),
-          onPressed: () {
-            final newLang = currentLang.toggle;
-            context.read<AppSettingProvider>().changeLanguage(newLang);
+        Selector<AppSettingProvider, Language>(
+          selector: (context, provider) => provider.language,
+          builder: (context, language, _) {
+            return IconButton(
+              icon: BaseTextLabel(language.flag, fontSize: 24),
+              onPressed: () {
+                final newLang = language.toggle;
+                context.read<AppSettingProvider>().changeLanguage(newLang);
+              },
+            );
           },
         ),
       ],
-      body: RefreshIndicator(
-        backgroundColor: AppColors.textWhite,
-        color: AppColors.textBlack,
-        onRefresh: () => provider.fetchPopularMovies(refresh: true),
-        child: _buildContent(provider, movies),
-      ),
+      body: _buildBody(),
     );
   }
 
-  Widget _buildContent(ListMovieProvider provider, List<MovieEntity> movies) {
-    if (provider.isLoading && !provider.hasData) {
-      return const Center(
-        child: BaseLoading(size: 50),
-      );
-    }
-
-    // Content
-    return ListView.separated(
-      controller: _scrollController,
-      padding: const EdgeInsets.symmetric(
-        horizontal: 20,
-        vertical: 16,
-      ),
-      itemCount: movies.length + _getFooterItemCount(provider),
-      separatorBuilder: (context, index) => const SizedBox(height: 20),
-      itemBuilder: (context, index) {
-        if (index >= movies.length) {
-          return _buildFooterItem(provider);
+  Widget _buildBody() {
+    // Check Loading State
+    return Selector<ListMovieProvider, bool>(
+      selector: (context, provider) => provider.isListMovieLoading,
+      builder: (context, isLoading, _) {
+        if (isLoading) {
+          return BaseLoading(size: 50);
         }
-
-        final movie = movies[index];
-        return MovieInfoCard(
-          movie: movie,
-          onTap: () {
-            ListMovieNavigator(
-              context: context,
-            ).navigateToDetail(movie.id!);
-          },
-        );
+        return _buildContent();
       },
     );
   }
 
-  int _getFooterItemCount(ListMovieProvider provider) {
-    if (provider.isLoadingMore) return 1;
-    if (provider.isError && provider.hasData) return 1;
-    if (provider.hasData && provider.isComplete) return 1;
-    return 0;
+  Widget _buildContent() {
+    return Selector<
+      ListMovieProvider,
+      ({
+        bool isListMovieFailure,
+        bool hasData,
+        List<MovieEntity> movies,
+        bool isLoadingMore,
+      })
+    >(
+      selector: (context, provider) => (
+        isListMovieFailure: provider.isListMovieFailure,
+        hasData: provider.hasData,
+        movies: provider.movies,
+        isLoadingMore: provider.isLoadingMore,
+      ),
+      builder: (context, state, _) {
+        // Error: First Fetch Data && Empty Data
+        if (state.isListMovieFailure && !state.hasData) {
+          return ListEmptyWidget(
+            text: S.of(context).empty_movies,
+            onRefresh: () async => _getData(isRefresh: true),
+          );
+        }
+
+        // Show list when has data
+        if (state.hasData) {
+          return _buildListMovies(state.movies, state.isLoadingMore);
+        }
+
+        return const SizedBox.shrink();
+      },
+    );
   }
 
-  Widget _buildFooterItem(ListMovieProvider provider) {
-    if (provider.isRefreshing) {
-      return const SizedBox.shrink();
-    }
+  Widget _buildListMovies(List<MovieEntity> movies, bool isLoadingMore) {
+    return RefreshIndicator(
+      onRefresh: () async => _getData(isRefresh: true),
+      child: ListView.separated(
+        controller: _scrollController,
+        padding: const EdgeInsets.symmetric(horizontal: 20),
+        itemCount: movies.length + (isLoadingMore ? 1 : 0),
+        separatorBuilder: (context, index) => const SizedBox(height: 20),
+        itemBuilder: (context, index) {
+          if (index >= movies.length) {
+            return _buildLoadingMoreStatus();
+          }
 
-    if (provider.isLoadingMore) {
-      return Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const BaseLoading(size: 25),
-            const SizedBox(width: 10),
-            BaseTextLabel(
-              S.of(context).loading_movies,
-              color: AppColors.textWhite,
-            ),
-          ],
-        ),
-      );
-    }
-    return const SizedBox.shrink();
+          final movie = movies[index];
+          return MovieInfoCard(
+            movie: movie,
+            onTap: () {
+              ListMovieNavigator(context: context).navigateToDetail(movie.id!);
+            },
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _buildLoadingMoreStatus() {
+    return SafeArea(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const BaseLoading(size: 25),
+          const SizedBox(width: 10),
+          BaseTextLabel(
+            S.of(context).loading_movies,
+            color: AppColors.textWhite,
+          ),
+        ],
+      ),
+    );
   }
 
   @override
