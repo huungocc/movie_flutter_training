@@ -30,5 +30,6 @@
   "loading_movies": "Đang tải phim...",
   "count_minutes": "{count} phút",
   "empty_movies": "Danh sách phim rỗng",
-  "st_went_wrong": "Đã có lỗi xảy ra"
+  "st_went_wrong": "Đã có lỗi xảy ra",
+  "n_a": "N/A"
 }

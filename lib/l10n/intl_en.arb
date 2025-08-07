@@ -30,5 +30,6 @@
   "loading_movies": "Loading movies...",
   "count_minutes": "{count} minutes",
   "empty_movies": "Movie list is empty",
-  "st_went_wrong": "Something went wrong"
+  "st_went_wrong": "Something went wrong",
+  "n_a": "N/A"
 }

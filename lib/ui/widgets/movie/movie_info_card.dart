@@ -38,7 +38,7 @@ class MovieInfoCard extends StatelessWidget {
               spacing: 5,
               children: [
                 BaseTextLabel(
-                  movie?.title ?? 'N/A',
+                  movie?.title ?? S.of(context).n_a,
                   fontSize: 16,
                   fontWeight: FontWeight.w500,
                   color: AppColors.textWhite,
@@ -47,19 +47,19 @@ class MovieInfoCard extends StatelessWidget {
                 const SizedBox(height: 8),
                 MovieInfoItem(
                   type: MovieItemType.star,
-                  info: movie?.voteAverage?.toStringAsFixed(1) ?? 'N/A',
+                  info: movie?.voteAverage?.toStringAsFixed(1) ?? S.of(context).n_a,
                 ),
                 MovieInfoItem(
                     type: MovieItemType.ticket,
                     info: (movie?.genres?.isNotEmpty == true)
-                        ? movie!.genres!.first.name ?? 'N/A'
-                        : 'N/A'
+                        ? movie!.genres!.first.name ?? S.of(context).n_a
+                        : S.of(context).n_a
                 ),
                 MovieInfoItem(
                   type: MovieItemType.calendar,
                   info: (movie?.releaseDate?.length ?? 0) >= 4
                     ? movie!.releaseDate!.substring(0, 4)
-                    : 'N/A',
+                    : S.of(context).n_a,
                 ),
                 MovieInfoItem(
                     type: MovieItemType.clock,
