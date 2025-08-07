@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:movie_flutter_training/common/app_colors.dart';
 import 'package:movie_flutter_training/generated/l10n.dart';
@@ -20,6 +19,7 @@ class MovieInfoCard extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Row(
+        spacing: 10,
         children: [
           ClipRRect(
             borderRadius: BorderRadius.circular(20),
@@ -32,36 +32,35 @@ class MovieInfoCard extends StatelessWidget {
               fit: BoxFit.cover,
             ),
           ),
-          const SizedBox(width: 10),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
+              spacing: 5,
               children: [
                 BaseTextLabel(
-                  movie?.title,
+                  movie?.title ?? S.of(context).n_a,
                   fontSize: 16,
                   fontWeight: FontWeight.w500,
                   color: AppColors.textWhite,
                   maxLines: 1,
                 ),
-                const SizedBox(height: 15),
+                const SizedBox(height: 8),
                 MovieInfoItem(
                   type: MovieItemType.star,
-                  info: movie?.voteAverage?.toStringAsFixed(1) ?? 'N/A',
+                  info: movie?.voteAverage?.toStringAsFixed(1) ?? S.of(context).n_a,
                 ),
-                const SizedBox(height: 5),
                 MovieInfoItem(
                     type: MovieItemType.ticket,
                     info: (movie?.genres?.isNotEmpty == true)
-                        ? movie!.genres!.first.name ?? 'N/A'
-                        : 'N/A'
+                        ? movie!.genres!.first.name ?? S.of(context).n_a
+                        : S.of(context).n_a
                 ),
-                const SizedBox(height: 5),
                 MovieInfoItem(
                   type: MovieItemType.calendar,
-                  info: movie?.releaseDate?.substring(0, 4) ?? 'N/A',
+                  info: (movie?.releaseDate?.length ?? 0) >= 4
+                    ? movie!.releaseDate!.substring(0, 4)
+                    : S.of(context).n_a,
                 ),
-                const SizedBox(height: 5),
                 MovieInfoItem(
                     type: MovieItemType.clock,
                     info: S.of(context).count_minutes(movie?.runtime ?? '100')

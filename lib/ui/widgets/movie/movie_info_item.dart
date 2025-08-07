@@ -39,9 +39,9 @@ class MovieInfoItem extends StatelessWidget {
 
     return Row(
       mainAxisSize: MainAxisSize.min,
+      spacing: 5,
       children: [
         icon,
-        const SizedBox(width: 5),
         BaseTextLabel(
           info,
           color: color,
