@@ -1,52 +1,51 @@
 import 'package:flutter/material.dart';
 import 'package:movie_flutter_training/models/entities/movie/movie_entity.dart';
+import 'package:movie_flutter_training/models/enums/load_status.dart';
 import 'package:movie_flutter_training/repository/movie_repository.dart';
 import 'package:movie_flutter_training/utils/exception_handler.dart';
-
-enum MovieDetailState {
-  initial,
-  loading,
-  loaded,
-  error,
-}
 
 class DetailMovieProvider extends ChangeNotifier {
   final MovieRepositoryImpl movieRepository;
 
-  MovieDetailState _state = MovieDetailState.initial;
-  MovieDetailState get state => _state;
+  ItemLoadStatus _state = ItemLoadStatus.initial;
+  ItemLoadStatus get state => _state;
 
   MovieEntity? _movieEntity;
   MovieEntity? get movieEntity => _movieEntity;
 
-  String? _errorMessage;
-  String? get errorMessage => _errorMessage;
+  bool _isMovieMark = false;
+  bool get isMovieMark => _isMovieMark;
 
   DetailMovieProvider(this.movieRepository);
 
   // Getters state
-  bool get isInitial => _state == MovieDetailState.initial;
-  bool get isLoading => _state == MovieDetailState.loading;
-  bool get isLoaded => _state == MovieDetailState.loaded;
-  bool get isError => _state == MovieDetailState.error;
+  bool get isMovieDetailInitial => _state == ItemLoadStatus.initial;
+  bool get isMovieDetailLoading => _state == ItemLoadStatus.loading;
+  bool get isMovieDetailLoaded => _state == ItemLoadStatus.success;
+  bool get iMovieDetailsError => _state == ItemLoadStatus.failure;
+
+  // Getters Condition State
   bool get hasData => _movieEntity != null;
 
-  void _setNewState(MovieDetailState newState, {String? error}) {
+  void _setNewState(ItemLoadStatus newState) {
     _state = newState;
-    _errorMessage = error;
     notifyListeners();
   }
 
   Future<void> loadSingleMovie(int id) async {
-    _setNewState(MovieDetailState.loading);
+    _setNewState(ItemLoadStatus.loading);
 
     try {
       _movieEntity = await movieRepository.getDetailMovie(id: id);
-      _setNewState(MovieDetailState.loaded);
+      _setNewState(ItemLoadStatus.success);
     } catch (e) {
-      final errorMsg = e.toString();
       ExceptionHandler.handleError(e);
-      _setNewState(MovieDetailState.error, error: errorMsg);
+      _setNewState(ItemLoadStatus.failure);
     }
+  }
+
+  void markMovie() {
+    _isMovieMark = !_isMovieMark;
+    notifyListeners();
   }
 }
