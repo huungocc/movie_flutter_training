@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:injectable/injectable.dart';
 import 'package:movie_flutter_training/models/entities/movie/movie_entity.dart';
 import 'package:movie_flutter_training/models/enums/load_status.dart';
 import 'package:movie_flutter_training/repository/movie_repository.dart';
 import 'package:movie_flutter_training/utils/exception_handler.dart';
 
+@injectable
 class ListMovieProvider extends ChangeNotifier {
-  final MovieRepositoryImpl movieRepository;
+  final MovieRepository movieRepository;
 
   ListLoadStatus _state = ListLoadStatus.initial;
   ListLoadStatus get state => _state;

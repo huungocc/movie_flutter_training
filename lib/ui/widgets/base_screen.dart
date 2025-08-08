@@ -64,8 +64,8 @@ class BaseScreen extends StatelessWidget {
             ],
           ),
         ),
-        bottomNavigationBar: bottomBar ?? null,
-        floatingActionButton: floatingButton ?? null);
+        bottomNavigationBar: bottomBar,
+        floatingActionButton: floatingButton);
     return Stack(
       children: [
         Positioned.fill(
