@@ -3,12 +3,11 @@ import 'package:movie_flutter_training/common/app_colors.dart';
 import 'package:movie_flutter_training/generated/l10n.dart';
 import 'package:movie_flutter_training/global_view_model/setting/app_setting_view_model.dart';
 import 'package:movie_flutter_training/models/enums/language.dart';
-import 'package:movie_flutter_training/network/api_util.dart';
-import 'package:movie_flutter_training/repository/movie_repository.dart';
 import 'package:movie_flutter_training/ui/pages/movie/list/list_movie_view_model.dart';
 import 'package:movie_flutter_training/ui/pages/movie/widgets/list_movie_content.dart';
 import 'package:movie_flutter_training/ui/widgets/base_screen.dart';
 import 'package:movie_flutter_training/ui/widgets/base_text_label.dart';
+import 'package:movie_flutter_training/utils/injection.dart';
 import 'package:provider/provider.dart';
 
 class ListMoviePage extends StatelessWidget {
@@ -17,8 +16,7 @@ class ListMoviePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (_) =>
-          ListMovieProvider(MovieRepositoryImpl(apiClient: ApiUtil.apiClient)),
+      create: (_) => getIt<ListMovieProvider>(),
       child: const _ListMovieBody(),
     );
   }
