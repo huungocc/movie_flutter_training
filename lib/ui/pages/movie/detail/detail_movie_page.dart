@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:movie_flutter_training/common/app_colors.dart';
 import 'package:movie_flutter_training/generated/l10n.dart';
-import 'package:movie_flutter_training/network/api_util.dart';
-import 'package:movie_flutter_training/repository/movie_repository.dart';
 import 'package:movie_flutter_training/ui/pages/movie/detail/detail_movie_view_model.dart';
 import 'package:movie_flutter_training/ui/pages/movie/widgets/detail_movie_content.dart';
 import 'package:movie_flutter_training/ui/widgets/base_screen.dart';
+import 'package:movie_flutter_training/utils/injection.dart';
 import 'package:provider/provider.dart';
 
 class DetailMovieArguments {
@@ -22,9 +21,7 @@ class DetailMoviePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (_) => DetailMovieProvider(
-        MovieRepositoryImpl(apiClient: ApiUtil.apiClient),
-      ),
+      create: (_) => getIt<DetailMovieProvider>(),
       child: _DetailMovieBody(arguments: arguments),
     );
   }
@@ -77,9 +74,7 @@ class _DetailMovieBodyState extends State<_DetailMovieBody> {
           },
         ),
       ],
-      body: DetailMovieContent(
-        onRefresh: _getData,
-      ),
+      body: DetailMovieContent(),
     );
   }
 }

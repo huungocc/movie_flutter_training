@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:movie_flutter_training/configs/app_configs.dart';
 import 'package:movie_flutter_training/ui/pages/app_start/splash/splash_page.dart';

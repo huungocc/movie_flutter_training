@@ -14,11 +14,8 @@ import 'package:movie_flutter_training/ui/widgets/movie/movie_info_item.dart';
 import 'package:provider/provider.dart';
 
 class DetailMovieContent extends StatelessWidget {
-  final VoidCallback onRefresh;
-
   const DetailMovieContent({
     super.key,
-    required this.onRefresh,
   });
 
   @override
@@ -37,7 +34,6 @@ class DetailMovieContent extends StatelessWidget {
           if (!provider.hasData) {
             return ListEmptyWidget(
               text: S.of(context).empty_movies,
-              onRefresh: () async => onRefresh(),
             );
           } else {
             final movie = provider.movieEntity;

@@ -1,3 +1,4 @@
+import 'package:injectable/injectable.dart';
 import 'package:movie_flutter_training/configs/app_configs.dart';
 import 'package:movie_flutter_training/models/entities/movie/movie_entity.dart';
 import 'package:movie_flutter_training/models/response/array_response.dart';
@@ -9,6 +10,7 @@ abstract class MovieRepository {
   Future<MovieEntity?> getDetailMovie({required int id});
 }
 
+@Injectable(as: MovieRepository)
 class MovieRepositoryImpl extends MovieRepository {
   ApiClient apiClient;
 
